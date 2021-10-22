@@ -4,9 +4,9 @@ import { v4 as uuidv4} from "uuid";
 @Injectable()
 export class ProductService {
     private products : Product[] = [];
-    insertProduct(title : string,desc : string,price : number){
+    insertProduct(title : string,desc : string,price : number,avatar : any){
         const ProId = uuidv4();
-        const NewProduct = new Product(ProId,title,desc,price);
+        const NewProduct = new Product(ProId,title,desc,price,avatar);
         this.products.push(NewProduct);
         return ProId;
     }
@@ -20,7 +20,7 @@ export class ProductService {
         } 
         return {...Sing};
     }
-    UpdateProduct(id : string,title : string,desc : string,price : number){ 
+    UpdateProduct(id : string,title : string,desc : string,price : number,avatar : any){ 
         const Sing = this.products.find(p => p.id === id);
         const SingIndex = this.products.findIndex(p => p.id === id);
         const update  = {...Sing};
@@ -32,6 +32,9 @@ export class ProductService {
         }
         if(price){ 
             update.price = price;
+        }
+        if(avatar){
+            update.avatar = avatar.filename;
         }
         this.products[SingIndex] = update;
     }

@@ -3,6 +3,8 @@ export class Product {
     public id : string,
     public title : string,
     public desc : string,
-    public price : number){
+    public price : number,
+    public avatar : any 
+    ){
     }
 }
