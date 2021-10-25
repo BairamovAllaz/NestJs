@@ -17,24 +17,31 @@ export class ProductsController {
             }
         })
     }))
-    addProduct(
+    async addProduct(
         @Body('title') title : string,
         @Body('desc') desc : string,
         @Body('price') price : number,
         @UploadedFile() avatar : Express.Multer.File
-    ) : any {
-        const GeneratedId=this.productService.insertProduct(title,desc,price,avatar.filename);
+    ){
+        const GeneratedId = await this.productService.insertProduct(title,desc,price,avatar.filename);
         return {id : GeneratedId};
     }
 
     @Get()
-    getAllData() {
-        return this.productService.getProducts();
+    async getAllData() {
+        const AllProduct = await this.productService.getProducts();
+        return AllProduct;
     }
+
+
     @Get(':id')
-    getSingle(@Param('id') Prodid : string){ 
-        return this.productService.getSingleProduct(Prodid)
+    async getSingle(@Param('id') Prodid : string){ 
+        const result = await this.productService.getSingleProduct(Prodid);
+        return result;
     }
+
+
+
     @Patch(':id')
     @UseInterceptors(FileInterceptor('file',{
         storage : diskStorage({
@@ -45,22 +52,20 @@ export class ProductsController {
             }
         })
     }))
-    update(
+
+    async update(
         @Param('id') id : string,
         @Body('title') title : string,
         @Body('desc') desc : string,
         @Body('price') price : number,
         @UploadedFile() avatar : Express.Multer.File
         ){ 
-            this.productService.UpdateProduct(id,title,desc,price,avatar);
+            await this.productService.UpdateProduct(id,title,desc,price,avatar);
             return "Its working you updated an prdouct";
         }
     @Delete(':id')
-    deleteItem(@Param("id") id : string){ 
-        this.productService.DeleteItem(id);
+    async deleteItem(@Param("id") id : string){ 
+        await this.productService.DeleteItem(id);
         return null;
     }
-
-
-
 }
